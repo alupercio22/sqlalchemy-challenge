@@ -69,8 +69,10 @@ def stations():
 def TOBS():
     session = Session(engine)
     """Return a list of all TOBS"""
-    results = session.query(Measurement.date,Measurement.tobs,Measurement.prcp).\
-                filter(Measurement.date >='2016-08-23').\
+    results = session.query(Measurement.date,
+    Measurement.tobs,Measurement.prcp).\
+                filter(Measurement.date >=
+                '2016-08-23').\
                 filter(Measurement.
                 station=='USC00519281').\
                 order_by(Measurement.date).all()
@@ -95,7 +97,7 @@ def JSON():
     """Return a list of min, avg and max TOBS for a start date"""
 
     results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
-                filter(Measurement.date >= start_date).all()
+                filter(Measurement.date >= start_date_tobs_dict).all()
 session.close()
 start_date_tobs = []
 for min, avg, max in results:
@@ -105,12 +107,7 @@ for min, avg, max in results:
     start_date_tobs_dict['max_temp'] = max
     start_date_tobs.append(start_date_tobs_dict)
 
-return jsonify(start_date_tobs)
-
-#json2
-
-
-
+return jsonify(start_end_tobs)
 #4. define main behavior
 if name == 'main':
     app.run(debug=True)
